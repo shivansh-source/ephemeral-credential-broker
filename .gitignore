@@ -1,0 +1,14 @@
+# Build artifacts
+bin/
+cover.out
+*.test
+
+# envtest downloaded binaries
+/bin/k8s
+
+# IDE
+.idea/
+*.swp
+
+# OS
+.DS_Store
