@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ephemeral-credential-broker-system
+  labels:
+    app.kubernetes.io/name: ephemeral-credential-broker
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ephemeral-credential-broker-controller-manager
+  namespace: ephemeral-credential-broker-system
+  labels:
+    app.kubernetes.io/name: ephemeral-credential-broker
+    control-plane: controller-manager
+spec:
+  # Single replica in v1 -- no leader election, no HA (design doc section 5,
+  # "Non-goals"). Add leader election and raise this only if you actually
+  # need it later.
+  replicas: 1
+  selector:
+    matchLabels:
+      control-plane: controller-manager
+  template:
+    metadata:
+      labels:
+        control-plane: controller-manager
+    spec:
+      serviceAccountName: ephemeral-credential-broker-controller
+      securityContext:
+        runAsNonRoot: true
+      containers:
+        - name: manager
+          image: ephemeral-credential-broker:dev
+          imagePullPolicy: IfNotPresent
+          args:
+            - --health-probe-bind-address=:8081
+          ports: []
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+            readOnlyRootFilesystem: true
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8081
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: 8081
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: 10m
+              memory: 64Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi
+      terminationGracePeriodSeconds: 10

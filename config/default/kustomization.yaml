@@ -1,0 +1,13 @@
+# Ties together config/crd, config/rbac, and config/manager the way
+# kubebuilder scaffolds normally do. `make deploy` (see Makefile) applies
+# this with `kubectl apply -k config/default` after setting the manager
+# image via kustomize's image transformer.
+resources:
+  - ../crd
+  - ../rbac
+  - ../manager
+
+labels:
+  - includeSelectors: false
+    pairs:
+      app.kubernetes.io/name: ephemeral-credential-broker
