@@ -1,0 +1,24 @@
+# Generated (by hand, matching the +kubebuilder:rbac markers on
+# EphemeralCredentialReconciler in internal/controller) rather than via
+# `controller-gen rbac:...`, for the same no-network-access reason as the
+# CRD manifest. Run `make manifests` once controller-gen is available.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: ephemeral-credential-broker-manager-role
+rules:
+  - apiGroups: ["broker.shivansh-sinha.dev"]
+    resources: ["ephemeralcredentials"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  - apiGroups: ["broker.shivansh-sinha.dev"]
+    resources: ["ephemeralcredentials/status"]
+    verbs: ["get", "update", "patch"]
+  - apiGroups: ["broker.shivansh-sinha.dev"]
+    resources: ["ephemeralcredentials/finalizers"]
+    verbs: ["update"]
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  - apiGroups: [""]
+    resources: ["events"]
+    verbs: ["create", "patch"]

@@ -1,0 +1,12 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: ephemeral-credential-broker-manager-rolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: ephemeral-credential-broker-manager-role
+subjects:
+  - kind: ServiceAccount
+    name: ephemeral-credential-broker-controller
+    namespace: ephemeral-credential-broker-system
