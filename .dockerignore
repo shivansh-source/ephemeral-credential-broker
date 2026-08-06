@@ -1,0 +1,6 @@
+bin
+dist/install.yaml
+.git
+.github
+docs
+*.md
