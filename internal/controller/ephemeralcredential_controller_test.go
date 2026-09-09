@@ -126,7 +126,8 @@ func reconcileRequest(ec *brokerv1alpha1.EphemeralCredential) ctrl.Request {
 func TestReconcile_AddsFinalizerFirst(t *testing.T) {
 	scheme := newTestScheme(t)
 	ec := baseCredential()
-	c := fake.NewClientBuilder().WithScheme(scheme).WithObjects(ec, appConfigSecret()).Build()
+	c := fake.NewClientBuilder().WithScheme(scheme).WithObjects(ec, appConfigSecret()).
+		WithStatusSubresource(&brokerv1alpha1.EphemeralCredential{}).Build()
 	prov := &fakeProvider{name: "github-app"}
 	r := &EphemeralCredentialReconciler{
 		Client:    c,
